@@ -12,6 +12,7 @@
 #include "storage/v2/storage.hpp"
 #include "utils/exceptions.hpp"
 #include "utils/logging.hpp"
+#include "utils/message.hpp"
 #include "utils/string.hpp"
 #include "utils/timer.hpp"
 #include "version.hpp"
@@ -422,7 +423,7 @@ void ProcessNodeRow(storage::Storage *store, const std::vector<Field> &fields, c
       auto it = node_id_map->find(node_id);
       if (it != node_id_map->end()) {
         if (FLAGS_skip_duplicate_nodes) {
-          spdlog::warn("Skipping duplicate node with ID '{}'", node_id);
+          spdlog::warn(utils::MessageWithLink("Skipping duplicate node with ID '{}'.", node_id, "memgr.ph/csv"));
           return;
         } else {
           throw LoadException("Node with ID '{}' already exists", node_id);
@@ -513,7 +514,8 @@ void ProcessRelationshipsRow(storage::Storage *store, const std::vector<Field> &
       auto it = node_id_map.find(node_id);
       if (it == node_id_map.end()) {
         if (FLAGS_skip_bad_relationships) {
-          spdlog::warn("Skipping bad relationship with START_ID '{}'", node_id);
+          spdlog::warn(
+              utils::MessageWithLink("Skipping bad relationship with START_ID '{}'.", node_id, "memgr.ph/csv"));
           return;
         } else {
           throw LoadException("Node with ID '{}' does not exist", node_id);
@@ -530,7 +532,7 @@ void ProcessRelationshipsRow(storage::Storage *store, const std::vector<Field> &
       auto it = node_id_map.find(node_id);
       if (it == node_id_map.end()) {
         if (FLAGS_skip_bad_relationships) {
-          spdlog::warn("Skipping bad relationship with END_ID '{}'", node_id);
+          spdlog::warn(utils::MessageWithLink("Skipping bad relationship with END_ID '{}'.", node_id, "memgr.ph/csv"));
           return;
         } else {
           throw LoadException("Node with ID '{}' does not exist", node_id);
