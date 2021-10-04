@@ -86,7 +86,6 @@ def write_procedure(context: mgp.ProcCtx, property_name: str, property_value: mg
     vertex.properties.set(property_name, property_value)
     # Connect the new vertex to the other vertices
     for v in vertices_to_connect:
-        print("ALMA")
         context.graph.create_edge(vertex, v, mgp.EdgeType("HAS_SAME_VALUE"))
 
     return mgp.Record(created_vertex=vertex)
